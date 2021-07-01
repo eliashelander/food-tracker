@@ -14,6 +14,10 @@ const saveJson = (data, path) => {
     fs.writeFileSync(path, stringifyData)
 }
 
+router.get('/test', function (req, res) {
+    res.send('hej');
+});
+
 router.get('/ingredients', function (req, res) {
     const ingredients = readJson('./db/ingredients.json').ingredients;
     res.json(ingredients);
@@ -45,7 +49,7 @@ router.post('/recipes', function (req, res) {
         recipes: newRecipies
     }
     saveJson(newData, './db/db.json');
-    res.status(200);
+    res.status(201);
     res.json({ msg: "Successfully added recipie" });
 })
 
@@ -72,12 +76,22 @@ router.patch('/recipes/:id', function (req, res) {
         recipes: newRecipies
     }
     saveJson(newData, './db/db.json');
-    res.status(200);
+    res.status(204);
     res.json({ msg: "Successfully updated recipie" });
 })
 
 router.delete('/recipes/:id', function (req, res) {
-    res.send(`Delete recipe with id ${req.params.id}`)
+    const data = readJson('./db/db.json');
+    const recipeIdx = data.recipes.findIndex(rec => rec.id === req.params.id);
+    let newRecipies = data.recipes;
+    newRecipies.splice(recipeIdx, 1);
+    const newData = {
+        ...data,
+        recipes: newRecipies
+    }
+    saveJson(newData, './db/db.json');
+    res.status(204);
+    res.json({ msg: "Successfully deleted recipie" });
 })
 
 router.get('/stock', function (req, res) {
@@ -97,7 +111,7 @@ router.patch('/stock', function (req, res) {
 
     saveJson(newData, './db/db.json');
 
-    res.status(200);
+    res.status(204);
     res.json({ msg: "Successfully updated stock", stock: newStock});
 })
 
