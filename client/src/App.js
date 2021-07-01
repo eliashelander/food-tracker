@@ -27,24 +27,98 @@ function App() {
   }, [])
 
   const cookRecipe = (ingredients) => {
-    let newStock = stock;
+    let newStock = stock.stock.map(i => i);
     ingredients.forEach(i => {
-        const ingredientToChange = stock.stock.findIndex(s => s.id === i.id)
-        const newQty = stock.stock[ingredientToChange].qty - i.qty;
-        newStock.stock[ingredientToChange] = {
-            ...newStock.stock[ingredientToChange],
-            qty: newQty
-        }
+      const ingredientToChange = newStock.findIndex(s => s.id === i.id)
+      let newQty = newStock[ingredientToChange].qty - i.qty;
+      newStock[ingredientToChange] = {
+        ...newStock[ingredientToChange],
+        qty: newQty
+      }
     })
+    setStock({ stock: newStock });
+  };
+
+  const handleAdd = id => {
+    let newStock = stock;
+    const ingredientToAdd = stock.stock.findIndex(s => s.id === id);
+
+    let addAmount;
+    switch (newStock.stock[ingredientToAdd].unit) {
+      case 'g':
+        addAmount = 10;
+        break;
+      case 'pcs':
+        addAmount = 1;
+        break;
+      case 'ml':
+        addAmount = 10;
+        break;
+      case 'dl':
+        addAmount = 1;
+        break;
+      default:
+        addAmount = 1;
+        break;
+    }
+
+    const newQty = parseInt(newStock.stock[ingredientToAdd].qty) + addAmount;
+
+    newStock.stock[ingredientToAdd] = {
+      ...newStock.stock[ingredientToAdd],
+      qty: newQty
+    }
+
     setStock(newStock);
-};
+  }
+
+  const handleSubtract = id => {
+     let newStock = stock;
+    const ingredientToSubtract = stock.stock.findIndex(s => s.id === id);
+
+    let addAmount;
+    switch (newStock.stock[ingredientToSubtract].unit) {
+      case 'g':
+        addAmount = 10;
+        break;
+      case 'pcs':
+        addAmount = 1;
+        break;
+      case 'ml':
+        addAmount = 10;
+        break;
+      case 'dl':
+        addAmount = 1;
+        break;
+      default:
+        addAmount = 1;
+        break;
+    }
+
+    let newQty = parseInt(newStock.stock[ingredientToSubtract].qty) - addAmount;
+
+    if(newQty < 0) {
+        newQty = 0;
+    }
+
+    newStock.stock[ingredientToSubtract] = {
+      ...newStock.stock[ingredientToSubtract],
+      qty: newQty
+    }
+
+    setStock(newStock);
+  }
+
+  const handleRemove = id => {
+     let newStock = stock;
+    const ingredientToRemove = stock.stock.findIndex(s => s.id === id);
+
+    newStock.stock.splice(ingredientToRemove, 1);
+
+    setStock(newStock);
+  }
 
   return (
-    // <>
-    //   {recipes.recipes.map(recipe => (
-    //     <h1 key={recipe.id}>{recipe.title}</h1>
-    //   ))}
-    // </>
     <Router>
       <div>
         <Nav />
@@ -60,7 +134,13 @@ function App() {
             />
           </Route>
           <Route path="/">
-            <Stock stock={stock} setStock={setStock}/>
+            <Stock
+              stock={stock}
+              setStock={setStock}
+              handleAdd={handleAdd}
+              handleSubtract={handleSubtract}
+              handleRemove={handleRemove}
+            />
           </Route>
         </Switch>
       </div>
