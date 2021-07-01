@@ -1,13 +1,8 @@
-require("dotenv").config();
-const express = require('express');
-const cors = require('cors');
-const low = require('lowdb');
-const FileSync = require('lowdb/adapters/FileSync');
-
-const adapter = new FileSync('./db/db.json')
-const db = low(adapter);
-
-const router = require('./apiRouter');
+import dotenv from 'dotenv'
+dotenv.config()
+import express from 'express';
+import cors from 'cors';
+import router from './apiRouter.js';
 
 const app = express();
 
@@ -22,4 +17,4 @@ app.listen(PORT, () => {
     console.log(`server is listening  on ${PORT}`);
 });
 
-module.exports = app;
+export default app;

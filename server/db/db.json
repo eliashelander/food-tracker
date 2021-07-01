@@ -1,0 +1,36 @@
+{
+    "recipes": [
+        {
+            "id": "fa2af090-a05f-41f6-841f-fa6c5933bc7c",
+            "title": "Muchroom soup",
+            "instructions": "Add all ingredients in water and boil for 30min",
+            "ingredients": [
+                "4cedd2ff-2fa9-46c5-a76c-c8d7fbbf11e9",
+                "428b4646-4e30-42df-93dd-b5c1cbc8b690",
+                "e671b563-ffa8-41fa-b332-6c48d623de34"
+            ]
+        }
+    ],
+    "stock": [
+        {
+            "id": "4cedd2ff-2fa9-46c5-a76c-c8d7fbbf11e9",
+            "qty": "5",
+            "unit": "pcs"
+         },
+         {
+            "id": "428b4646-4e30-42df-93dd-b5c1cbc8b690",
+            "qty": "5",
+            "unit": "g"
+         },
+         {
+            "id": "10b8c4d0-85a1-48f9-bef1-19787e808689",
+            "qty": "15",
+            "unit": "dl"
+         },
+         {
+            "id": "e671b563-ffa8-41fa-b332-6c48d623de34",
+            "qty": "900",
+            "unit": "g"
+         }
+    ]
+}
