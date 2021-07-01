@@ -1,4 +1,5 @@
 import express from 'express';
+import uuid4 from "uuid4";
 import fs from 'fs';
 
 const router = express.Router();
@@ -30,7 +31,22 @@ router.get('/recipes', function (req, res) {
 })
 
 router.post('/recipes', function (req, res) {
-    res.send(`Add recipe`)
+    const data = readJson('./db/db.json');
+    const recipes = data.recipes;
+    const recipieToAdd = {
+        id: uuid4(),
+        title: req.body.title,
+        instructions: req.body.instructions,
+        ingredients: req.body.ingredients
+    }
+    const newRecipies = [...recipes, recipieToAdd]
+    const newData = {
+        ...data,
+        recipes: newRecipies
+    }
+    saveJson(newData, './db/db.json');
+    res.status(200);
+    res.json({ msg: "Successfully added recipie" });
 })
 
 router.get('/recipes/:id', function (req, res) {
@@ -39,8 +55,25 @@ router.get('/recipes/:id', function (req, res) {
     res.json(recipe);
 })
 
-router.put('/recipes/:id', function (req, res) {
-    res.send(`Update recipe with id ${req.params.id}`)
+router.patch('/recipes/:id', function (req, res) {
+    const data = readJson('./db/db.json');
+    const recipe = data.recipes.find(rec => rec.id === req.params.id);
+    const recipeIdx = data.recipes.findIndex(rec => rec.id === req.params.id);
+    const recipieToUpdate = {
+        ...recipe,
+        title: req.body.title ? req.body.title : recipe.title,
+        instructions: req.body.instructions ? req.body.instructions : recipe.instructions,
+        ingredients: req.body.ingredients ? req.body.ingredients : recipe.ingredients
+    }
+    let newRecipies = data.recipes;
+    newRecipies[recipeIdx] = recipieToUpdate;
+    const newData = {
+        ...data,
+        recipes: newRecipies
+    }
+    saveJson(newData, './db/db.json');
+    res.status(200);
+    res.json({ msg: "Successfully updated recipie" });
 })
 
 router.delete('/recipes/:id', function (req, res) {
@@ -53,7 +86,19 @@ router.get('/stock', function (req, res) {
 })
 
 router.patch('/stock', function (req, res) {
-    res.send(`Update available ingredients in stock`)
+    const data = readJson('./db/db.json');
+    const stock = data.stock;
+    const newStock = req.body.stock;
+
+    const newData = {
+        ...data,
+        stock: newStock
+    }
+
+    saveJson(newData, './db/db.json');
+
+    res.status(200);
+    res.json({ msg: "Successfully updated stock", stock: newStock});
 })
 
 export default router;
