@@ -26,6 +26,12 @@ function App() {
       .then(res => setStock({ stock: res }))
   }, [])
 
+  useEffect(() => {
+    fetch("http://localhost:8080/api/ingredients")
+      .then(res => res.json())
+      .then(res => setIngredients({ ingredients: res }))
+  }, [])
+
   const cookRecipe = (ingredients) => {
     let newStock = stock.stock.map(i => i);
     ingredients.forEach(i => {
@@ -73,7 +79,7 @@ function App() {
   }
 
   const handleSubtract = id => {
-     let newStock = stock;
+    let newStock = stock;
     const ingredientToSubtract = stock.stock.findIndex(s => s.id === id);
 
     let addAmount;
@@ -97,8 +103,8 @@ function App() {
 
     let newQty = parseInt(newStock.stock[ingredientToSubtract].qty) - addAmount;
 
-    if(newQty < 0) {
-        newQty = 0;
+    if (newQty < 0) {
+      newQty = 0;
     }
 
     newStock.stock[ingredientToSubtract] = {
@@ -110,12 +116,38 @@ function App() {
   }
 
   const handleRemove = id => {
-     let newStock = stock;
+    let newStock = stock;
     const ingredientToRemove = stock.stock.findIndex(s => s.id === id);
 
     newStock.stock.splice(ingredientToRemove, 1);
 
     setStock(newStock);
+  }
+
+  const addIngredient = (id, qty) => {
+    let newStock = stock.stock.map(i => i);
+    let alreadyStock = false;
+
+    stock.stock.forEach(s => {
+      if (s.id === id) {
+        const ingredientToChange = newStock.findIndex(stock => stock.id === id)
+        let newQty = parseInt(newStock[ingredientToChange].qty) + parseInt(qty);
+        newStock[ingredientToChange] = {
+          ...newStock[ingredientToChange],
+          qty: newQty
+        }
+        alreadyStock = true;
+      }
+    })
+
+    if (!alreadyStock) {
+      const ingredientToAdd = ingredients.ingredients.find(i => i.id === id)
+      newStock.push({
+        ...ingredientToAdd,
+        qty
+      })
+    }
+    setStock({ stock: newStock });
   }
 
   return (
@@ -137,6 +169,8 @@ function App() {
             <Stock
               stock={stock}
               setStock={setStock}
+              ingredients={ingredients}
+              addIngredient={addIngredient}
               handleAdd={handleAdd}
               handleSubtract={handleSubtract}
               handleRemove={handleRemove}

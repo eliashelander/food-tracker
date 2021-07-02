@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import Ingredient from './components/Ingredient';
 
-const Stock = ({ stock, handleAdd, handleSubtract, handleRemove }) => {
+const Stock = ({ stock, ingredients, handleAdd, addIngredient, handleSubtract, handleRemove }) => {
     const [updateComponent, setUpdateComponent] = useState(false);
 
     const handleClick = e => {
@@ -33,6 +34,10 @@ const Stock = ({ stock, handleAdd, handleSubtract, handleRemove }) => {
                     </li>
                 ))}
             </ul>
+            <br/>
+            {ingredients.ingredients.map(ingredient => (
+                <Ingredient key={ingredient.id} ingredient={ingredient} addIngredient={addIngredient} />
+            ))}
         </>
     )
 }
