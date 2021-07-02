@@ -23,22 +23,32 @@ const Stock = ({ stock, ingredients, handleAdd, addIngredient, handleSubtract, h
     };
 
     return (
-        <>
-            <h1>Stock</h1>
-            <ul>
+        <section className="stock-wrapper">
+            <h1 className="stock-title">Stock</h1>
+            <ul className="stock-ul">
                 {stock.stock.map(i => (
-                    <li key={i.id}>{i.title} ({i.qty}{i.unit})
-                        <button ingredient-id={i.id} value="add" onClick={handleClick}>+</button>
-                        <button ingredient-id={i.id} value="subtract" onClick={handleClick}>-</button>
-                        <button ingredient-id={i.id} value="remove" onClick={handleClick}>X</button>
+                    <li className="stock-li" key={i.id}>
+                        <div className="stock-li__left">
+                            {i.title}
+                        </div>
+                        <div className="stock-li__right">
+                            <span className="stock-li__qty">{i.qty} {i.unit}</span>
+                            <div className="stock-li__buttons-wrapper">
+                                <button className="stock-btn stock-btn__add" ingredient-id={i.id} value="add" onClick={handleClick}>+</button>
+                                <button className="stock-btn stock-btn__subtract" ingredient-id={i.id} value="subtract" onClick={handleClick}>-</button>
+                                <button className="stock-btn stock-btn__remove" ingredient-id={i.id} value="remove" onClick={handleClick}>X</button>
+                            </div>
+                        </div>
                     </li>
                 ))}
             </ul>
-            <br/>
-            {ingredients.ingredients.map(ingredient => (
-                <Ingredient key={ingredient.id} ingredient={ingredient} addIngredient={addIngredient} />
-            ))}
-        </>
+            <section className="ingredients-wrapper">
+                <h2>Add new ingredients</h2>
+                {ingredients.ingredients.map(ingredient => (
+                    <Ingredient key={ingredient.id} ingredient={ingredient} addIngredient={addIngredient} />
+                ))}
+            </section>
+        </section>
     )
 }
 

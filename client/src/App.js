@@ -13,6 +13,7 @@ function App() {
   const [ingredients, setIngredients] = useState({ ingredients: [] });
   const [stock, setStock] = useState({ stock: [] });
   const [recipes, setRecipes] = useState({ recipes: [] });
+  const [successMsg, setSuccessMsg] = useState({ msg: '' });
 
   useEffect(() => {
     fetch("http://localhost:8080/api/recipes")
@@ -43,6 +44,15 @@ function App() {
       }
     })
     setStock({ stock: newStock });
+
+    const requestOptions = {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ stock: newStock })
+    };
+    fetch('http://localhost:8080/api/stock', requestOptions)
+      .then(response => response.json())
+      .then(data => setSuccessMsg({ msg: data.msg }));
   };
 
   const handleAdd = id => {
@@ -76,6 +86,15 @@ function App() {
     }
 
     setStock(newStock);
+
+    const requestOptions = {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newStock)
+    };
+    fetch('http://localhost:8080/api/stock', requestOptions)
+      .then(response => response.json())
+      .then(data => setSuccessMsg({ msg: data.msg }));
   }
 
   const handleSubtract = id => {
@@ -113,6 +132,15 @@ function App() {
     }
 
     setStock(newStock);
+
+    const requestOptions = {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newStock)
+    };
+    fetch('http://localhost:8080/api/stock', requestOptions)
+      .then(response => response.json())
+      .then(data => setSuccessMsg({ msg: data.msg }));
   }
 
   const handleRemove = id => {
@@ -122,32 +150,51 @@ function App() {
     newStock.stock.splice(ingredientToRemove, 1);
 
     setStock(newStock);
+
+    const requestOptions = {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newStock)
+    };
+    fetch('http://localhost:8080/api/stock', requestOptions)
+      .then(response => response.json())
+      .then(data => setSuccessMsg({ msg: data.msg }));
   }
 
   const addIngredient = (id, qty) => {
-    let newStock = stock.stock.map(i => i);
+    let newStock = { stock: stock.stock.map(i => i)};
     let alreadyStock = false;
 
     stock.stock.forEach(s => {
       if (s.id === id) {
-        const ingredientToChange = newStock.findIndex(stock => stock.id === id)
-        let newQty = parseInt(newStock[ingredientToChange].qty) + parseInt(qty);
-        newStock[ingredientToChange] = {
-          ...newStock[ingredientToChange],
+        const ingredientToChange = newStock.stock.findIndex(stock => stock.id === id)
+        let newQty = parseInt(newStock.stock[ingredientToChange].qty) + parseInt(qty);
+        newStock.stock[ingredientToChange] = {
+          ...newStock.stock[ingredientToChange],
           qty: newQty
         }
         alreadyStock = true;
       }
     })
 
-    if (!alreadyStock) {
+    if (!alreadyStock) {
       const ingredientToAdd = ingredients.ingredients.find(i => i.id === id)
-      newStock.push({
+      newStock.stock.push({
         ...ingredientToAdd,
         qty
       })
     }
-    setStock({ stock: newStock });
+    
+    setStock(newStock);
+
+    const requestOptions = {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newStock)
+    };
+    fetch('http://localhost:8080/api/stock', requestOptions)
+      .then(response => response.json())
+      .then(data => setSuccessMsg({ msg: data.msg }));
   }
 
   return (
@@ -183,3 +230,9 @@ function App() {
 }
 
 export default App;
+
+// Add recipie
+// Update recipie
+// Tell when out of stock in recipe
+// Style
+// Refactor and handle api endpoints with error and so on

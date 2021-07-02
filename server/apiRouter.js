@@ -76,7 +76,7 @@ router.patch('/recipes/:id', function (req, res) {
         recipes: newRecipies
     }
     saveJson(newData, './db/db.json');
-    res.status(204);
+    res.status(200);
     res.json({ msg: "Successfully updated recipie" });
 })
 
@@ -90,7 +90,7 @@ router.delete('/recipes/:id', function (req, res) {
         recipes: newRecipies
     }
     saveJson(newData, './db/db.json');
-    res.status(204);
+    res.status(200);
     res.json({ msg: "Successfully deleted recipie" });
 })
 
@@ -111,7 +111,7 @@ router.patch('/stock', function (req, res) {
 
     saveJson(newData, './db/db.json');
 
-    res.status(204);
+    res.status(200);
     res.json({ msg: "Successfully updated stock", stock: newStock});
 })
 
