@@ -2,8 +2,8 @@
     "extends": [
         "airbnb",
         "airbnb/hooks"
-    //     "react-app",
-    //   "react-app/jest"
+        //     "react-app",
+        //   "react-app/jest"
     ],
     "parser": "babel-eslint",
     "env": {

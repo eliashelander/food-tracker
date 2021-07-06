@@ -6,36 +6,44 @@ import {
   Route,
 } from 'react-router-dom';
 import axios from 'axios';
+import dotenv from 'dotenv';
 import Nav from './components/Nav';
 import Recipes from './recipes/Recipes';
 import Stock from './stock/Stock';
 
+dotenv.config({ path: '../.env' });
+
 function App() {
-  const [ingredients, setIngredients] = useState({ ingredients: [] });
-  const [stock, setStock] = useState({ stock: [] });
-  const [recipes, setRecipes] = useState({ recipes: [] });
-  const [errors, setErrors] = useState({ fetch: false });
+  const [ingredients, setIngredients] = useState([]);
+  const [stock, setStock] = useState([]);
+  const [recipes, setRecipes] = useState([]);
+  const [errors, setErrors] = useState({
+    fetch: false,
+  });
 
   useEffect(() => {
-    axios.get(`${process.env.HOST}/api/recipes`)
+    axios.get(`${process.env.REACT_APP_API_URL}/api/recipes`)
       // .then((res) => res.json())
-      .then((res) => setRecipes({ recipes: res }));
+      .then((res) => setRecipes(res.data))
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    axios.get(`${process.env.HOST}/api/stock`)
+    axios.get(`${process.env.REACT_APP_API_URL}/api/stock`)
       // .then((res) => res.json())
-      .then((res) => setStock({ stock: res }));
+      .then((res) => setStock(res.data))
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    axios.get(`${process.env.HOST}/api/ingredients`)
+    axios.get(`${process.env.REACT_APP_API_URL}/api/ingredients`)
       // .then((res) => res.json())
-      .then((res) => setIngredients({ ingredients: res }));
+      .then((res) => setIngredients(res.data))
+      .catch((err) => console.log(err));
   }, []);
 
   const cookRecipe = (ingredientsUsed) => {
-    const newStock = stock.stock.map((i) => i);
+    const newStock = stock.map((i) => i);
     ingredientsUsed.forEach((i) => {
       const ingredientToChange = newStock.findIndex((s) => s.id === i.id);
       const newQty = newStock[ingredientToChange].qty - i.qty;
@@ -44,21 +52,21 @@ function App() {
         qty: newQty,
       };
     });
-    setStock({ stock: newStock });
+    setStock(newStock);
 
     // const requestOptions = {
     //   headers: { 'Content-Type': 'application/json' },
     //   body: JSON.stringify({ stock: newStock }),
     // };
-    axios.patch(`${process.env.HOST}/api/stock`, { stock: newStock });
+    axios.patch(`${process.env.REACT_APP_API_URL}/api/stock`, { stock: newStock });
   };
 
   const handleAdd = (id) => {
     const newStock = stock;
-    const ingredientToAdd = stock.stock.findIndex((s) => s.id === id);
+    const ingredientToAdd = stock.findIndex((s) => s.id === id);
 
     let addAmount;
-    switch (newStock.stock[ingredientToAdd].unit) {
+    switch (newStock[ingredientToAdd].unit) {
       case 'g':
         addAmount = 10;
         break;
@@ -76,10 +84,10 @@ function App() {
         break;
     }
 
-    const newQty = parseInt(newStock.stock[ingredientToAdd].qty, 10) + addAmount;
+    const newQty = parseInt(newStock[ingredientToAdd].qty, 10) + addAmount;
 
-    newStock.stock[ingredientToAdd] = {
-      ...newStock.stock[ingredientToAdd],
+    newStock[ingredientToAdd] = {
+      ...newStock[ingredientToAdd],
       qty: newQty,
     };
 
@@ -90,18 +98,20 @@ function App() {
     //   headers: { 'Content-Type': 'application/json' },
     //   body: JSON.stringify(newStock),
     // };
-    // fetch('${process.env.HOST}stock', requestOptions)
+    // fetch('${process.env.REACT_APP_API_URL}stock', requestOptions)
     //   .then((response) => response.json())
     //   .then((data) => setSuccessMsg({ msg: data.msg }));
-    axios.patch(`${process.env.HOST}/api/stock`, newStock);
+    axios.patch(`${process.env.REACT_APP_API_URL}/api/stock`, { stock: newStock })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
   };
 
   const handleSubtract = (id) => {
     const newStock = stock;
-    const ingredientToSubtract = stock.stock.findIndex((s) => s.id === id);
+    const ingredientToSubtract = stock.findIndex((s) => s.id === id);
 
     let addAmount;
-    switch (newStock.stock[ingredientToSubtract].unit) {
+    switch (newStock[ingredientToSubtract].unit) {
       case 'g':
         addAmount = 10;
         break;
@@ -119,14 +129,14 @@ function App() {
         break;
     }
 
-    let newQty = parseInt(newStock.stock[ingredientToSubtract].qty, 10) - addAmount;
+    let newQty = parseInt(newStock[ingredientToSubtract].qty, 10) - addAmount;
 
     if (newQty < 0) {
       newQty = 0;
     }
 
-    newStock.stock[ingredientToSubtract] = {
-      ...newStock.stock[ingredientToSubtract],
+    newStock[ingredientToSubtract] = {
+      ...newStock[ingredientToSubtract],
       qty: newQty,
     };
 
@@ -137,17 +147,19 @@ function App() {
     //   headers: { 'Content-Type': 'application/json' },
     //   body: JSON.stringify(newStock),
     // };
-    // fetch(`${process.env.HOST}stock`, requestOptions)
+    // fetch(`${process.env.REACT_APP_API_URL}stock`, requestOptions)
     //   .then((response) => response.json())
     //   .then((data) => setSuccessMsg({ msg: data.msg }));
-    axios.patch(`${process.env.HOST}/api/stock`, newStock);
+    axios.patch(`${process.env.REACT_APP_API_URL}/api/stock`, { stock: newStock })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
   };
 
   const handleRemove = (id) => {
     const newStock = stock;
-    const ingredientToRemove = stock.stock.findIndex((s) => s.id === id);
+    const ingredientToRemove = stock.findIndex((s) => s.id === id);
 
-    newStock.stock.splice(ingredientToRemove, 1);
+    newStock.splice(ingredientToRemove, 1);
 
     setStock(newStock);
 
@@ -156,22 +168,24 @@ function App() {
     //   headers: { 'Content-Type': 'application/json' },
     //   body: JSON.stringify(newStock),
     // };
-    // fetch('${process.env.HOST}/api/stock', requestOptions)
+    // fetch('${process.env.REACT_APP_API_URL}/api/stock', requestOptions)
     //   .then((response) => response.json())
     //   .then((data) => setSuccessMsg({ msg: data.msg }));
-    axios.patch(`${process.env.HOST}/api/stock`, newStock);
+    axios.patch(`${process.env.REACT_APP_API_URL}/api/stock`, { stock: newStock })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
   };
 
   const addIngredient = (id, qty) => {
-    const newStock = { stock: stock.stock.map((item) => item) };
+    const newStock = stock.map((item) => item);
     let alreadyStock = false;
 
-    stock.stock.forEach((s) => {
+    stock.forEach((s) => {
       if (s.id === id) {
-        const ingredientToChange = newStock.stock.findIndex((item) => item.id === id);
-        const newQty = parseInt(newStock.stock[ingredientToChange].qty, 10) + parseInt(qty, 10);
-        newStock.stock[ingredientToChange] = {
-          ...newStock.stock[ingredientToChange],
+        const ingredientToChange = newStock.findIndex((item) => item.id === id);
+        const newQty = parseInt(newStock[ingredientToChange].qty, 10) + parseInt(qty, 10);
+        newStock[ingredientToChange] = {
+          ...newStock[ingredientToChange],
           qty: newQty,
         };
         alreadyStock = true;
@@ -179,8 +193,8 @@ function App() {
     });
 
     if (!alreadyStock) {
-      const ingredientToAdd = ingredients.ingredients.find((i) => i.id === id);
-      newStock.stock.push({
+      const ingredientToAdd = ingredients.find((i) => i.id === id);
+      newStock.push({
         ...ingredientToAdd,
         qty,
       });
@@ -193,10 +207,12 @@ function App() {
     //   headers: { 'Content-Type': 'application/json' },
     //   body: JSON.stringify(newStock),
     // };
-    // fetch('${process.env.HOST}stock', requestOptions)
+    // fetch('${process.env.REACT_APP_API_URL}stock', requestOptions)
     //   .then((response) => response.json())
     //   .then((data) => setSuccessMsg({ msg: data.msg }));
-    axios.patch(`${process.env.HOST}/api/stock`, newStock);
+    axios.patch(`${process.env.REACT_APP_API_URL}/api/stock`, { stock: newStock })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
   };
 
   const handleError = (errorObject) => {
@@ -243,9 +259,3 @@ function App() {
 }
 
 export default App;
-
-// Add recipie
-// Update recipie
-// Tell when out of stock in recipe
-// Style
-// Refactor and handle api endpoints with error and so on

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// import PropTypes from 'prop-types';
 
 const Ingredient = ({ ingredient, addIngredient }) => {
   const [inputValues, setInputValues] = useState({
@@ -37,5 +38,10 @@ const Ingredient = ({ ingredient, addIngredient }) => {
     </div>
   );
 };
+
+// Ingredient.propTypes = {
+//   ingredient: PropTypes.objectOf(PropTypes.object).isRequired,
+//   addIngredient: PropTypes.func.isRequired,
+// };
 
 export default Ingredient;

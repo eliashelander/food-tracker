@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+// import PropTypes from 'prop-types';
 
 const Card = ({
   recipe, stock, cookRecipe, handleError,
@@ -6,17 +7,17 @@ const Card = ({
   const [notEnoughIngredients, setNotEnoughIngredients] = useState(false);
   const [updateComponent, setUpdateComponent] = useState(false);
 
-  const checkIfEnoughStock = () => {
+  const checkIfEnoughStock = useCallback(() => {
     try {
       const allIngredientsRecipe = recipe.ingredients.map((i) => i.id);
-      const allIngredientsStock = stock.stock.map((s) => s.id);
+      const allIngredientsStock = stock.map((s) => s.id);
       allIngredientsRecipe.forEach((i) => {
         if (!allIngredientsStock.includes(i)) {
           setNotEnoughIngredients(true);
         }
       });
       recipe.ingredients.forEach((i) => {
-        const ingredientToCompare = stock.stock.find((item) => item.id === i.id);
+        const ingredientToCompare = stock.find((item) => item.id === i.id);
         if (ingredientToCompare.qty < i.qty) {
           setNotEnoughIngredients(true);
         }
@@ -24,15 +25,16 @@ const Card = ({
     } catch (error) {
       handleError({ fetch: error.message });
     }
-  };
+  }, [recipe.ingredients, stock, handleError]);
 
   useEffect(() => {
     checkIfEnoughStock();
-  });
+  }, [checkIfEnoughStock]);
 
   const handleClick = () => {
     cookRecipe(recipe.ingredients);
     setUpdateComponent(!updateComponent);
+    checkIfEnoughStock();
   };
 
   return (
@@ -64,5 +66,18 @@ const Card = ({
     </div>
   );
 };
+
+// Card.propTypes = {
+//   recipe: PropTypes.objectOf(PropTypes.object).isRequired,
+//   stock: PropTypes.arrayOf(PropTypes.shape({
+//     id: PropTypes.string.isRequired,
+//     title: PropTypes.string.isRequired,
+//     imageUrl: PropTypes.string.isRequired,
+//     unit: PropTypes.string.isRequired,
+//     qty: PropTypes.string.isRequired,
+//   })).isRequired,
+//   cookRecipe: PropTypes.func.isRequired,
+//   handleError: PropTypes.func.isRequired,
+// };
 
 export default Card;
