@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App Should match snapshot 1`] = `
+<div>
+  <nav
+    className="nav"
+  >
+    <ul
+      className="nav__ul"
+    >
+      <li
+        className="nav__li"
+      >
+        <a
+          href="/"
+          onClick={[Function]}
+        >
+          <button
+            className="nav__btn nav__btn--active"
+            onClick={[Function]}
+            type="button"
+            value="ingredients"
+          >
+            My Ingredients
+          </button>
+        </a>
+      </li>
+      <li
+        className="nav__li"
+      >
+        <a
+          href="/recipes"
+          onClick={[Function]}
+        >
+          <button
+            className="nav__btn"
+            onClick={[Function]}
+            type="button"
+            value="recipes"
+          >
+            Recipes
+          </button>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <section
+    className="stock-wrapper"
+  >
+    <h1
+      className="stock-title"
+    >
+      Stock
+    </h1>
+    <ul
+      className="stock-ul"
+    />
+    <section
+      className="ingredients-wrapper"
+    >
+      <h2>
+        Add new ingredients
+      </h2>
+    </section>
+  </section>
+</div>
+`;
