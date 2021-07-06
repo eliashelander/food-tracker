@@ -1,19 +1,24 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 const Nav = () => {
+  const location = useLocation();
   const [activePage, setActivePage] = useState('ingredients');
+
+  useEffect(() => {
+    setActivePage(location.pathname);
+  }, [location]);
 
   const handleClick = (e) => {
     switch (e.target.value) {
       case 'ingredients':
-        setActivePage('ingredients');
+        setActivePage('/');
         break;
       case 'recipes':
-        setActivePage('recipes');
+        setActivePage('/recipes');
         break;
       default:
-        setActivePage('ingredients');
+        setActivePage('/');
         break;
     }
   };
@@ -23,12 +28,12 @@ const Nav = () => {
       <ul className="nav__ul">
         <li className="nav__li">
           <Link to="/">
-            <button value="ingredients" className={activePage === 'ingredients' ? 'nav__btn nav__btn--active' : 'nav__btn'} type="button" onClick={handleClick}>My Ingredients</button>
+            <button value="ingredients" className={activePage === '/' ? 'nav__btn nav__btn--active' : 'nav__btn'} type="button" onClick={handleClick}>My Ingredients</button>
           </Link>
         </li>
         <li className="nav__li">
           <Link to="/recipes">
-            <button value="recipes" className={activePage === 'recipes' ? 'nav__btn nav__btn--active' : 'nav__btn'} type="button" onClick={handleClick}>Recipes</button>
+            <button value="recipes" className={activePage === '/recipes' ? 'nav__btn nav__btn--active' : 'nav__btn'} type="button" onClick={handleClick}>Recipes</button>
           </Link>
         </li>
       </ul>

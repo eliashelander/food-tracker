@@ -54,10 +54,6 @@ function App() {
     });
     setStock(newStock);
 
-    // const requestOptions = {
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ stock: newStock }),
-    // };
     axios.patch(`${process.env.REACT_APP_API_URL}/api/stock`, { stock: newStock });
   };
 
@@ -93,14 +89,6 @@ function App() {
 
     setStock(newStock);
 
-    // const requestOptions = {
-    //   method: 'PATCH',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(newStock),
-    // };
-    // fetch('${process.env.REACT_APP_API_URL}stock', requestOptions)
-    //   .then((response) => response.json())
-    //   .then((data) => setSuccessMsg({ msg: data.msg }));
     axios.patch(`${process.env.REACT_APP_API_URL}/api/stock`, { stock: newStock })
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
@@ -142,14 +130,6 @@ function App() {
 
     setStock(newStock);
 
-    // const requestOptions = {
-    //   method: 'PATCH',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(newStock),
-    // };
-    // fetch(`${process.env.REACT_APP_API_URL}stock`, requestOptions)
-    //   .then((response) => response.json())
-    //   .then((data) => setSuccessMsg({ msg: data.msg }));
     axios.patch(`${process.env.REACT_APP_API_URL}/api/stock`, { stock: newStock })
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
@@ -163,14 +143,6 @@ function App() {
 
     setStock(newStock);
 
-    // const requestOptions = {
-    //   method: 'PATCH',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(newStock),
-    // };
-    // fetch('${process.env.REACT_APP_API_URL}/api/stock', requestOptions)
-    //   .then((response) => response.json())
-    //   .then((data) => setSuccessMsg({ msg: data.msg }));
     axios.patch(`${process.env.REACT_APP_API_URL}/api/stock`, { stock: newStock })
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
@@ -202,14 +174,6 @@ function App() {
 
     setStock(newStock);
 
-    // const requestOptions = {
-    //   method: 'PATCH',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(newStock),
-    // };
-    // fetch('${process.env.REACT_APP_API_URL}stock', requestOptions)
-    //   .then((response) => response.json())
-    //   .then((data) => setSuccessMsg({ msg: data.msg }));
     axios.patch(`${process.env.REACT_APP_API_URL}/api/stock`, { stock: newStock })
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
