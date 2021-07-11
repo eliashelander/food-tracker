@@ -3,32 +3,46 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 const Card = ({
   recipe, stock, cookRecipe,
+  handleError,
 }) => {
   const [notEnoughIngredients, setNotEnoughIngredients] = useState(false);
   const [updateComponent, setUpdateComponent] = useState(false);
+  const [initialLoad, setInitialLoad] = useState(true);
 
   const checkIfEnoughStock = useCallback(() => {
     try {
+      if (initialLoad) {
+        setInitialLoad(false);
+        return;
+      }
       const allIngredientsRecipe = recipe.ingredients.map((ingr) => ({
         id: ingr.id,
         qty: ingr.qty,
       }));
       const allIngredientsStock = stock.map((ingr) => ingr.id);
       allIngredientsRecipe.forEach((ingr) => {
-        if (!allIngredientsStock.includes(ingr)) {
+        if (!allIngredientsStock.includes(ingr.id)) {
           setNotEnoughIngredients(true);
           return;
         }
         const ingredientToCompare = stock.find((item) => item.id === ingr.id);
-        if (ingredientToCompare.qty < ingr.qty) {
+        if (ingredientToCompare.qty < parseInt(ingr.qty, 8)) {
           setNotEnoughIngredients(true);
         }
       });
-    } catch (error) {
-      console.log(error);
-      // handleError({ fetch: error.message });
+    } catch (err) {
+      handleError({
+        fetch: true,
+        msg: err.message,
+      });
     }
-  }, [recipe.ingredients, stock]);
+  }, [recipe, stock, initialLoad, handleError]);
+
+  useEffect(() => {
+    if (initialLoad) {
+      setUpdateComponent(!updateComponent);
+    }
+  }, [notEnoughIngredients, updateComponent, initialLoad]);
 
   useEffect(() => {
     checkIfEnoughStock();

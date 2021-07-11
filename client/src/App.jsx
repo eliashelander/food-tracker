@@ -19,27 +19,37 @@ function App() {
   const [recipes, setRecipes] = useState([]);
   const [errors, setErrors] = useState({
     fetch: false,
+    message: '',
   });
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/api/recipes`)
       // .then((res) => res.json())
       .then((res) => setRecipes(res.data))
-      .catch((err) => console.log(err));
+      .catch((err) => setErrors({
+        fetch: true,
+        msg: err.message,
+      }));
   }, []);
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/api/stock`)
       // .then((res) => res.json())
       .then((res) => setStock(res.data))
-      .catch((err) => console.log(err));
+      .catch((err) => setErrors({
+        fetch: true,
+        msg: err.message,
+      }));
   }, []);
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/api/ingredients`)
       // .then((res) => res.json())
       .then((res) => setIngredients(res.data))
-      .catch((err) => console.log(err));
+      .catch((err) => setErrors({
+        fetch: true,
+        msg: err.message,
+      }));
   }, []);
 
   const cookRecipe = (ingredientsUsed) => {
@@ -90,8 +100,11 @@ function App() {
     setStock(newStock);
 
     axios.patch(`${process.env.REACT_APP_API_URL}/api/stock`, { stock: newStock })
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err));
+      // .then((res) => console.log(res.data))
+      .catch((err) => setErrors({
+        fetch: true,
+        msg: err.message,
+      }));
   };
 
   const handleSubtract = (id) => {
@@ -131,8 +144,11 @@ function App() {
     setStock(newStock);
 
     axios.patch(`${process.env.REACT_APP_API_URL}/api/stock`, { stock: newStock })
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err));
+      // .then((res) => console.log(res.data))
+      .catch((err) => setErrors({
+        fetch: true,
+        msg: err.message,
+      }));
   };
 
   const handleRemove = (id) => {
@@ -144,8 +160,11 @@ function App() {
     setStock(newStock);
 
     axios.patch(`${process.env.REACT_APP_API_URL}/api/stock`, { stock: newStock })
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err));
+      // .then((res) => console.log(res.data))
+      .catch((err) => setErrors({
+        fetch: true,
+        msg: err.message,
+      }));
   };
 
   const addIngredient = (id, qty) => {
@@ -175,8 +194,11 @@ function App() {
     setStock(newStock);
 
     axios.patch(`${process.env.REACT_APP_API_URL}/api/stock`, { stock: newStock })
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err));
+      // .then((res) => console.log(res.data))
+      .catch((err) => setErrors({
+        fetch: true,
+        msg: err.message,
+      }));
   };
 
   const handleError = (errorObject) => {
