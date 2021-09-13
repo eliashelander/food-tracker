@@ -1,4 +1,4 @@
-# food-tracker
+# Food tracker
 
 ## Table of contents
 * [General info](#general-info)
