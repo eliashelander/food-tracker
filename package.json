@@ -1,22 +1,24 @@
 {
-  "name": "food-tracker",
+  "name": "server",
   "version": "1.0.0",
-  "description": "Track your ingredients at home and know what and when you need to go shopping.",
-  "main": "index.js",
-  "engines": {
-    "node": "14.17.6"
-  },
+  "description": "",
+  "main": "server.js",
+  "type": "module",
   "scripts": {
-    "start": "cd server && npm start"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/eliashelander/food-tracker.git"
+    "start": "node server.js ",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/eliashelander/food-tracker/issues"
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.9",
+    "uuid4": "^2.0.2"
   },
-  "homepage": "https://github.com/eliashelander/food-tracker#readme"
+  "engines": {
+    "node": "14.17.6"
+  }
 }
